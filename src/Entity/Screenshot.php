@@ -14,10 +14,10 @@ class Screenshot
     private $id;
 
     #[ORM\Column(type: 'datetime')]
-    private $creation_date;
+    private $creationDate;
 
     #[ORM\Column(type: 'boolean')]
-    private $is_private;
+    private $isPrivate;
 
     #[ORM\Column(type: 'string', length: 128)]
     private $url;
@@ -29,24 +29,24 @@ class Screenshot
 
     public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->creation_date;
+        return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date): self
+    public function setCreationDate(\DateTimeInterface $creationDate): self
     {
-        $this->creation_date = $creation_date;
+        $this->creationDate = $creationDate;
 
         return $this;
     }
 
     public function getIsPrivate(): ?bool
     {
-        return $this->is_private;
+        return $this->isPrivate;
     }
 
-    public function setIsPrivate(bool $is_private): self
+    public function setIsPrivate(bool $isPrivate): self
     {
-        $this->is_private = $is_private;
+        $this->isPrivate = $isPrivate;
 
         return $this;
     }

@@ -23,7 +23,7 @@ class User
     private $phone;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $password_hash;
+    private $passwordHash;
 
     public function getId(): ?int
     {
@@ -68,12 +68,12 @@ class User
 
     public function getPasswordHash(): ?string
     {
-        return $this->password_hash;
+        return $this->passwordHash;
     }
 
-    public function setPasswordHash(string $password_hash): self
+    public function setPasswordHash(string $passwordHash): self
     {
-        $this->password_hash = $password_hash;
+        $this->passwordHash = $passwordHash;
 
         return $this;
     }

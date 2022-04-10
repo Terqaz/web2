@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Скриншоты в БД{% endblock %}
+
+{% block body %}
+<div class="table-wrapper">
+	<table>
+		<thead>
+			<tr>
+				<td>id</td>
+				<td>creation_date</td>
+				<td>is_private</td>
+				<td>url </td>
+			</tr>
+		</thead>
+		<tbody>
+		{% for screenshot in screenshots %}
+            <tr>
+            	<td>{{ screenshot.id }}</td>
+            	<td>{{ screenshot.date }}</td>
+            	<td>{{ screenshot.isPrivate }}</td>
+            	<td>{{ screenshot.url }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No screenshots</td>
+            </tr>
+        {% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
