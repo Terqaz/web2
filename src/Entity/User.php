@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -13,17 +15,17 @@ class User
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 50)]
+    #[ORM\Column(type: 'string', length: 32)]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 128)]
-    private $email;
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Question::class)]
+    private $questions;
 
-    #[ORM\Column(type: 'string', length: 10)]
-    private $phone;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private $passwordHash;
+    public function __construct($name)
+    {
+        $this->name = $name;
+        $this->questions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -42,38 +44,32 @@ class User
         return $this;
     }
 
-    public function getEmail(): ?string
+    /**
+     * @return Collection<int, Question>
+     */
+    public function getQuestions(): Collection
     {
-        return $this->email;
+        return $this->questions;
     }
 
-    public function setEmail(string $email): self
+    public function addQuestion(Question $question): self
     {
-        $this->email = $email;
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setAuthor($this);
+        }
 
         return $this;
     }
 
-    public function getPhone(): ?string
+    public function removeQuestion(Question $question): self
     {
-        return $this->phone;
-    }
-
-    public function setPhone(string $phone): self
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function getPasswordHash(): ?string
-    {
-        return $this->passwordHash;
-    }
-
-    public function setPasswordHash(string $passwordHash): self
-    {
-        $this->passwordHash = $passwordHash;
+        if ($this->questions->removeElement($question)) {
+            // set the owning side to null (unless already changed)
+            if ($question->getAuthor() === $this) {
+                $question->setAuthor(null);
+            }
+        }
 
         return $this;
     }

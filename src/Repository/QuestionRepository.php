@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\Screenshot;
+use App\Entity\Question;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Screenshot|null find($id, $lockMode = null, $lockVersion = null)
- * @method Screenshot|null findOneBy(array $criteria, array $orderBy = null)
- * @method Screenshot[]    findAll()
- * @method Screenshot[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Question|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Question|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Question[]    findAll()
+ * @method Question[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ScreenshotRepository extends ServiceEntityRepository
+class QuestionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Screenshot::class);
+        parent::__construct($registry, Question::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Screenshot $entity, bool $flush = true): void
+    public function add(Question $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,7 +37,7 @@ class ScreenshotRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Screenshot $entity, bool $flush = true): void
+    public function remove(Question $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -46,15 +46,15 @@ class ScreenshotRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return Screenshot[] Returns an array of Screenshot objects
+    //  * @return Question[] Returns an array of Question objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
+            ->orderBy('q.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -63,10 +63,10 @@ class ScreenshotRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Screenshot
+    public function findOneBySomeField($value): ?Question
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
