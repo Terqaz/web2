@@ -1,6 +1,6 @@
 DirectoryIndex index.php
 RewriteEngine on
-RewriteBase /
+RewriteBase /newsite2.local/public/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

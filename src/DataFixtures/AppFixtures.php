@@ -2,23 +2,37 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+use \DateTime;
 use App\Entity\Answer;
 use App\Entity\User;
 use App\Entity\Question;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
     private const USERS = [
         [
-            'name' => 'Великий прогер'
+            'name' => 'Великий прогер',
+            'roles' => ['ROLE_ADMIN'],
+            'email' => 'admin1@site.com',
+            'password' => '123456'
         ], [
-            'name' => 'Кирилл Максимов'
+            'name' => 'Кирилл Максимов',
+            'roles' => ['ROLE_ADMIN'],
+            'email' => 'admin2@site.com',
+            'password' => '123456a'
         ], [
-            'name' => 'Иванов Иван'
+            'name' => 'Иванов Иван',
+            'roles' => [],
+            'email' => 'user1@site.com',
+            'password' => '123456b'
         ], [
-            'name' => 'Micah Jordan'
+            'name' => 'Micah Jordan',
+            'roles' => [],
+            'email' => 'user2@site.com',
+            'password' => '123456c'
         ]
     ];
 
@@ -35,12 +49,12 @@ class AppFixtures extends Fixture
             'isModerated' => true
         ], [
             'header' => 'Если в LUA поставить запятую после последней переменной то будет ли это считатся трудно уловимой ошибкой?',
-            'text' => "а) крахмал;\nб) фруктоза;\nв) мальтоза;\nг) целлюлоза.",
+            'text' => '',
             'category' => 'LUA',
             'isModerated' => true
         ], [
             'header' => '6. Установите последовательность углеводов по мере увеличения молекулярной массы',
-            'text' => '',
+            'text' => "а) крахмал;\nб) фруктоза;\nв) мальтоза;\nг) целлюлоза.",
             'category' => 'Химия',
             'isModerated' => true
         ]
@@ -69,24 +83,44 @@ class AppFixtures extends Fixture
         ]
     ];
 
+    private $passwordHasher;
+
+    public function __construct (UserPasswordHasherInterface $passwordHasher) 
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $users = [];
 
-        foreach (self::USERS as $i => $user) {
-            $user = new User($user['name']);
-
+        foreach (self::USERS as $i => $userData) {
+            $user = (new User())
+                ->setName($userData['name'])
+                ->setRoles($userData['roles'])
+                ->setEmail($userData['email']);
+            $user->setPassword(
+                    $this->passwordHasher->hashPassword(
+                        $user,
+                        $userData['password']
+                    )
+                );
             $manager->persist($user);
             $users[] = $user;
         }
 
         foreach (self::QUESTIONS as $i => $question) {
+            $questionTimestamp = 1652868287 - rand(10**6, 10**7);
+
             $question = (new Question())
                 ->setAuthor($this->randomElement($users))
                 ->setHeader($question['header'])
                 ->setText($question['text'])
                 ->setCategory($question['category'])
-                ->setIsModerated($question['isModerated']);
+                ->setIsModerated($question['isModerated'])
+                ->setDateCreated(
+                    (new DateTime())->setTimestamp($questionTimestamp)
+                );
 
             $manager->persist($question);
 
@@ -95,7 +129,10 @@ class AppFixtures extends Fixture
                     ->setAuthor($this->randomElement($users))
                     ->setQuestion($question)
                     ->setText($answer['text'])
-                    ->setIsModerated($answer['isModerated']);
+                    ->setIsModerated($answer['isModerated'])
+                    ->setDateCreated(
+                        (new DateTime())->setTimestamp($questionTimestamp + rand(10**4, 5 * 10**5))
+                    );
 
                 $manager->persist($answer);
             }

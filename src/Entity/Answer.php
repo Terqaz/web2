@@ -19,6 +19,9 @@ class Answer
     #[ORM\Column(type: 'boolean')]
     private $isModerated;
 
+    #[ORM\Column(type: 'datetime')]
+    private $dateCreated;
+
     #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: 'answers')]
     #[ORM\JoinColumn(nullable: false)]
     private $question;
@@ -76,6 +79,18 @@ class Answer
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(\DateTimeInterface $dateCreated): self
+    {
+        $this->dateCreated = $dateCreated;
 
         return $this;
     }

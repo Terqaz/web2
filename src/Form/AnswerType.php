@@ -2,26 +2,24 @@
 
 namespace App\Form;
 
-use App\Entity\Question;
+use App\Entity\Answer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class QuestionType extends AbstractType
+class AnswerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('header', TextType::class, [
-                'label' => 'Текст вопроса'
+            ->add('text', TextType::class, [
+                'label' => 'Введите текст своего ответа'
             ])
-            ->add('text', TextareaType::class, [
-                'label' => 'Подробное описание'
-            ])
-            ->add('category', TextType::class, [
-                'label' => 'Категория'
+            ->add('questionId', HiddenType::class, [
+                'mapped' => false,
+                'data' => $options['questionId']
             ])
         ;
     }
@@ -29,7 +27,9 @@ class QuestionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Question::class,
+            'data_class' => Answer::class,
+            'questionId' => 0
         ]);
+        $resolver->setAllowedTypes('questionId', 'int');
     }
 }

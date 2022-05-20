@@ -27,6 +27,9 @@ class Question
     #[ORM\Column(type: 'boolean')]
     private $isModerated;
 
+    #[ORM\Column(type: 'datetime')]
+    private $dateCreated;
+
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, orphanRemoval: true)]
     private $answers;
 
@@ -37,6 +40,11 @@ class Question
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->header . ' ' . $this->category;
     }
 
     public function getId(): ?int
@@ -118,6 +126,18 @@ class Question
                 $answer->setQuestion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(\DateTimeInterface $dateCreated): self
+    {
+        $this->dateCreated = $dateCreated;
 
         return $this;
     }

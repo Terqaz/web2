@@ -45,6 +45,23 @@ class AnswerRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return Answer[] Returns an array of Answer objects
+     */
+    public function findModeratedByQuestionId($questionId)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.question = :questionId')
+            ->setParameter('questionId', $questionId)
+            ->andWhere('a.isModerated = :isModerated')
+            ->setParameter('isModerated', true)
+            ->orderBy('a.dateCreated', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Answer[] Returns an array of Answer objects
     //  */

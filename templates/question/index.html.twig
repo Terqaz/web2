@@ -1,41 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Question index{% endblock %}
+{% block title %} Вопросы | QA - сервис вопросов и ответов{% endblock %}
 
 {% block body %}
-    <h1>Question index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Header</th>
-                <th>Text</th>
-                <th>Category</th>
-                <th>IsModerated</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="container-fluid">
+        <a href="{{ path('app_question_new') }}" class="btn btn-primary mb-3 "> 
+            <h3> Задать свой вопрос </h3>
+        </a>
+        <h2 class="mb-3">...или ответить на вопросы других: </h2>
         {% for question in questions %}
-            <tr>
-                <td>{{ question.id }}</td>
-                <td>{{ question.header }}</td>
-                <td>{{ question.text }}</td>
-                <td>{{ question.category }}</td>
-                <td>{{ question.isModerated ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_question_show', {'id': question.id}) }}">show</a>
-                    <a href="{{ path('app_question_edit', {'id': question.id}) }}">edit</a>
-                </td>
-            </tr>
+            <div class="card mb-3">
+              <div class="card-body">
+                <a href="{{ path('app_question_show', {'id': question.id}) }}">
+                    <h5 class="card-title"> {{ question.header }} </h5> 
+                </a>
+                <p class="card-text"> 
+                    Вопрос задан {{ question.dateCreated.format('d.m.Y H:i:s') }} 
+                </p>
+                <h6 class="card-subtitle mb-2 text-muted"> 
+                    Ответов: {{ question.answers.count }} 
+                </h6>
+                {# <a href="{{ path('app_question_edit', {'id': question.id}) }}">edit</a> #}
+              </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <p>Не удалось загрузить вопросы</p>
 
-    <a href="{{ path('app_question_new') }}">Create new</a>
+        {% endfor %}
+    </div>
+
 {% endblock %}

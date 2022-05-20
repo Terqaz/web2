@@ -16,4 +16,5 @@ npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
+/public/.htaccess
 format_PSR-12.bat

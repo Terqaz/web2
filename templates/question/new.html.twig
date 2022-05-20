@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Question{% endblock %}
+{% block title %}Создать вопрос | QA - сервис вопросов и ответов{% endblock %}
 
 {% block body %}
-    <h1>Create new Question</h1>
+    <a href="{{ path('app_question_index') }}" class="btn btn-light mb-3">
+        Назад к списку вопросов
+    </a>
+    <h1> Создать вопрос </h1>
 
     {{ include('question/_form.html.twig') }}
-
-    <a href="{{ path('app_question_index') }}">back to list</a>
 {% endblock %}

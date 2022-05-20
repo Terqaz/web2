@@ -11,5 +11,12 @@ homepage:
     path: /
     controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
     defaults:
-        path: /question/
+        path: /questions/
+        permanent: true
+
+old_question_index: #TODO
+    path: /question
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /questions/
         permanent: true

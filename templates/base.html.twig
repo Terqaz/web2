@@ -6,16 +6,40 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
 
-{#         {% block stylesheets %}
+        {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-        {% endblock %} #}
-        
+        {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center align-items-center p-2 mb-4 border-bottom">
+                <a href="{{ path('app_question_index') }}" class="mb-3 mb-md-0 me-md-auto text-decoration-none text-black">
+                    <h3>QA - сервис вопросов и ответов</h3>
+                </a>
+                <ul class="nav nav-pills align-items-center">
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="nav-item" style="margin-right: 10px;">
+                            <h4 class="m-md-0"> Привет, {{ app.user.name }} </h4>
+                        </li>
+                        <li class="nav-item"><a href="{{ path('app_logout') }}" class="btn btn-primary">
+                            Выход
+                        </a></li>
+                    {% else %}
+                        <li class="nav-item"><a href="{{ path('app_login') }}" class="btn btn-primary">
+                            Вход
+                        </a></li>
+                        <li class="nav-item"><a href="{{ path('app_register') }}" class="btn btn-secondary">
+                            Регистрация
+                        </a></li>
+                    {% endif %}
+                    
+                </ul>
+            </header>
+            {% block body %}{% endblock %}
+        </div>
     </body>
 </html>

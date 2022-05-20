@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Регистрация | QA - сервис вопросов и ответов{% endblock %}
+
+{% block body %}
+    <div class="container" style="max-width: 400px;">
+        <h3>Регистрация</h3>
+
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.name, {
+                label: 'Имя пользователя'
+            }) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Пароль'
+            }) }}
+            {{ form_row(registrationForm.agreeTerms, {
+                label: 'Согласен(-а) с условиями использования'
+            }) }}
+
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+        {{ form_end(registrationForm) }}
+    </div>
+{% endblock %}
