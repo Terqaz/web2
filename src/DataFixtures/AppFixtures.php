@@ -2,12 +2,12 @@
 
 namespace App\DataFixtures;
 
-use \DateTime;
 use App\Entity\Answer;
-use App\Entity\User;
 use App\Entity\Question;
-use Doctrine\Persistence\ObjectManager;
+use App\Entity\User;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -17,22 +17,26 @@ class AppFixtures extends Fixture
             'name' => 'Великий прогер',
             'roles' => ['ROLE_ADMIN'],
             'email' => 'admin1@site.com',
-            'password' => '123456'
+            'password' => '123456',
+            'apiToken' => 'some_hard_brootforce_token1'
+
         ], [
             'name' => 'Кирилл Максимов',
             'roles' => ['ROLE_ADMIN'],
             'email' => 'admin2@site.com',
-            'password' => '123456a'
+            'password' => '123456a',
+
         ], [
             'name' => 'Иванов Иван',
             'roles' => [],
             'email' => 'user1@site.com',
-            'password' => '123456b'
+            'password' => '123456b',
+            'apiToken' => 'some_hard_brootforce_token2'
         ], [
             'name' => 'Micah Jordan',
             'roles' => [],
             'email' => 'user2@site.com',
-            'password' => '123456c'
+            'password' => '123456c',
         ]
     ];
 
@@ -99,6 +103,9 @@ class AppFixtures extends Fixture
                 ->setName($userData['name'])
                 ->setRoles($userData['roles'])
                 ->setEmail($userData['email']);
+            if (isset($userData['apiToken'])) {
+                $user->setApiToken($userData['apiToken']);
+            }
             $user->setPassword(
                     $this->passwordHasher->hashPassword(
                         $user,

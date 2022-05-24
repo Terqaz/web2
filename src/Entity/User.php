@@ -34,6 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Question::class)]
     private $questions;
 
+    #[ORM\Column(type: 'string', length: 255, unique: true, nullable: true)]
+    private $apiToken;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -147,6 +150,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $question->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(string $apiToken): self
+    {
+        $this->apiToken = $apiToken;
 
         return $this;
     }

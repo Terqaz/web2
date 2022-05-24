@@ -1,3 +1,4 @@
+.*
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -18,3 +19,8 @@ yarn-error.log
 
 /public/.htaccess
 format_PSR-12.bat
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
