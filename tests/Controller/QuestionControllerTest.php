@@ -6,7 +6,7 @@ use App\Entity\Question;
 use App\Repository\QuestionRepository;
 use App\Tests\AbstractTest;
 
-class QuestionTest extends AbstractTest
+class QuestionControllerTest extends AbstractTest
 {
     public function testHomeAndDetailPages_notLogged(): void
     {

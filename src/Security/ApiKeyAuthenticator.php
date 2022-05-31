@@ -17,11 +17,11 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
 class ApiKeyAuthenticator extends AbstractAuthenticator
 {
-    private $entityManager;
+    private $em;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
+        $this->em = $entityManager;
     }
 
     /**
@@ -38,15 +38,17 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
     {
         $apiToken = $request->headers->get('X-AUTH-TOKEN');
         if (null === $apiToken) {
-            throw new CustomUserMessageAuthenticationException('No API token provided');
+            throw new CustomUserMessageAuthenticationException('API токен не предоставлен');
         }
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['apiToken' => $apiToken]);
+
+        $userRepository = $this->em->getRepository(User::class);
+        $user = $userRepository->findOneBy(['apiToken' => $apiToken]);
         if (null === $user) {
-            throw new CustomUserMessageAuthenticationException('API token not found');
+            throw new CustomUserMessageAuthenticationException('API токен не найден');
         }
 
         return new Passport(
-            new UserBadge($user->getApiToken()),
+            new UserBadge($user->getUserIdentifier()),
             new CustomCredentials(function () {
                 return true;
             }, null)

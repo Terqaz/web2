@@ -4,13 +4,25 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\QuestionRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    collectionOperations: ['get'],
-    itemOperations: ['get']
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['get_list']],
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['get_detail_question']],
+        ],
+    ],
+    attributes: ["security" => "is_granted('ROLE_USER')"],
+    normalizationContext: ['groups' => ['get_list', 'get_detail_question']],
 )]
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
@@ -18,26 +30,32 @@ class Question
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["get_list", "get_detail_question"])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(["get_list", "get_detail_question"])]
     private $header;
 
     #[ORM\Column(type: 'string', length: 2048, nullable: true)]
+    #[Groups("get_detail_question")]
     private $text;
 
     #[ORM\Column(type: 'string', length: 32)]
+    #[Groups(["get_list", "get_detail_question"])]
     private $category;
 
     #[ORM\Column(type: 'boolean')]
     private $isModerated;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(["get_list", "get_detail_question"])]
     private $dateCreated;
 
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, orphanRemoval: true)]
     private $answers;
 
+    #[Groups("get_detail_question")]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'questions')]
     #[ORM\JoinColumn(nullable: false)]
     private $author;
@@ -135,12 +153,12 @@ class Question
         return $this;
     }
 
-    public function getDateCreated(): ?\DateTimeInterface
+    public function getDateCreated(): ?DateTimeInterface
     {
         return $this->dateCreated;
     }
 
-    public function setDateCreated(\DateTimeInterface $dateCreated): self
+    public function setDateCreated(DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 

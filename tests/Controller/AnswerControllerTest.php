@@ -6,7 +6,7 @@ use App\Entity\Answer;
 use App\Repository\AnswerRepository;
 use App\Tests\AbstractTest;
 
-class AnswerTest extends AbstractTest
+class AnswerControllerTest extends AbstractTest
 {
     public function testAddAnswer(): void
     {

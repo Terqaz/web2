@@ -4,11 +4,23 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AnswerRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    collectionOperations: ['get'],
-    itemOperations: ['get']
+    collectionOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['get_list']],
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['get_detail_answer']],
+        ],
+    ],
+    attributes: ["security" => "is_granted('ROLE_USER')"],
+    normalizationContext: ['groups' => ['get', 'get_detail']],
 )]
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
 class Answer
@@ -16,15 +28,18 @@ class Answer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['get_list', 'get_detail_answer'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 2048)]
+    #[Groups('get_detail_answer')]
     private $text;
 
     #[ORM\Column(type: 'boolean')]
     private $isModerated;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['get_list', 'get_detail_answer'])]
     private $dateCreated;
 
     #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: 'answers')]
@@ -33,6 +48,7 @@ class Answer
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('get_detail_answer')]
     private $author;
 
     public function getId(): ?int
@@ -88,12 +104,12 @@ class Answer
         return $this;
     }
 
-    public function getDateCreated(): ?\DateTimeInterface
+    public function getDateCreated(): ?DateTimeInterface
     {
         return $this->dateCreated;
     }
 
-    public function setDateCreated(\DateTimeInterface $dateCreated): self
+    public function setDateCreated(DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
